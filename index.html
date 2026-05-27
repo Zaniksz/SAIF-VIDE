@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SAIF VIDE — Tecnología para tu Seguridad</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      /* Paleta suavizada para mayor armonía */
+      --negro:       #060a13;
+      --marino:      #0a1222;
+      --panel:       #101a2e;
+      --cyan:        #00d2ff;
+      --cyan-dim:    rgba(0, 210, 255, 0.08);
+      --cyan-border: rgba(0, 210, 255, 0.15);
+      --verde:       #00e68a;
+      --verde-dim:   rgba(0, 230, 138, 0.08);
+      --naranja:     #ff7b54;
+      --naranja-dim: rgba(255, 123, 84, 0.1);
+      --blanco:      #e6f2f8;
+      --gris:        #8da9c4;
+      
+      --titulo:      'Orbitron', monospace;
+      --mono:        'Share Tech Mono', monospace;
+      --cuerpo:      'DM Sans', sans-serif;
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--negro);
+      color: var(--blanco);
+      font-family: var(--cuerpo);
+      overflow-x: hidden;
+    }
+
+    /* ── FONDO GLOBAL ── */
+    body::before {
+      content:'';
+      position:fixed; inset:0;
+      background:
+        radial-gradient(ellipse 70% 50% at 15% 5%,  rgba(0,210,255,0.03) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 70% at 85% 95%, rgba(0,230,138,0.02) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(255,123,84,0.015) 0%, transparent 70%);
+      pointer-events:none; z-index:0;
+    }
+    body::after {
+      content:'';
+      position:fixed; inset:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size:60px 60px;
+      pointer-events:none; z-index:0;
+    }
+    section, nav, header, footer, .divider { position:relative; z-index:1; }
+
+    /* ─────────── NAVBAR ─────────── */
+    nav {
+      position:fixed; top:0; left:0; right:0;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:1.2rem 4rem;
+      background:rgba(6, 10, 19, 0.85);
+      backdrop-filter:blur(15px);
+      border-bottom:1px solid var(--cyan-border);
+      z-index:200;
+      transition: background 0.3s ease;
+    }
+    .nav-brand {
+      display:flex; align-items:center; gap:0.8rem;
+    }
+    .nav-icon {
+      width:36px; height:36px;
+      border:1.5px solid var(--cyan);
+      border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1rem;
+      box-shadow:0 0 10px rgba(0,210,255,0.2);
+    }
+    .nav-logo {
+      font-family:var(--titulo); font-size:1.1rem; font-weight:900;
+      letter-spacing:0.2em; color:var(--blanco);
+    }
+    .nav-logo span { color:var(--cyan); }
+    .nav-links { display:flex; gap:2.5rem; list-style:none; }
+    .nav-links a {
+      font-family:var(--mono); font-size:0.75rem; color:var(--gris);
+      text-decoration:none; letter-spacing:0.1em; text-transform:uppercase;
+      transition:color 0.3s;
+    }
+    .nav-links a:hover { color:var(--cyan); }
+    .nav-cta {
+      font-family:var(--titulo); font-size:0.7rem; font-weight:700;
+      letter-spacing:0.12em; color:var(--negro);
+      background:var(--cyan); border:none; border-radius: 4px;
+      padding:0.6rem 1.5rem; cursor:pointer; text-decoration:none;
+      text-transform:uppercase; transition:all 0.3s ease;
+    }
+    .nav-cta:hover { background:var(--blanco); box-shadow: 0 4px 15px rgba(0,210,255,0.3); }
+
+    /* ─────────── HERO ─────────── */
+    header {
+      min-height:100vh;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      text-align:center; padding:8rem 2rem 5rem;
+      overflow:hidden;
+    }
+    .hero-eyebrow {
+      font-family:var(--mono); font-size:0.75rem; color:var(--cyan);
+      letter-spacing:0.35em; text-transform:uppercase;
+      margin-bottom:1.8rem;
+      opacity:0; animation:fadeUp 0.7s ease 0.2s forwards;
+    }
+    .hero-title {
+      font-family:var(--titulo); font-size:clamp(3rem, 7vw, 6.5rem);
+      font-weight:900; color:var(--blanco); line-height:1.05;
+      letter-spacing:-0.02em; margin-bottom:1rem;
+      opacity:0; animation:fadeUp 0.7s ease 0.4s forwards;
+    }
+    .hero-title .vl { color:var(--cyan); text-shadow:0 0 30px rgba(0,210,255,0.4); }
+    .hero-tagline {
+      font-family:var(--mono); font-size:clamp(0.9rem, 2vw, 1.2rem);
+      color:var(--verde); letter-spacing:0.18em;
+      margin-bottom:2.5rem;
+      opacity:0; animation:fadeUp 0.7s ease 0.6s forwards;
+    }
+    .hero-desc {
+      max-width:600px; font-size:1.05rem; color:var(--gris);
+      line-height:1.8; margin-bottom:3.5rem;
+      opacity:0; animation:fadeUp 0.7s ease 0.8s forwards;
+    }
+    .hero-btns {
+      display:flex; gap:1.2rem; flex-wrap:wrap; justify-content:center;
+      opacity:0; animation:fadeUp 0.7s ease 1s forwards;
+    }
+    .btn-primary {
+      font-family:var(--titulo); font-size:0.75rem; font-weight:700;
+      letter-spacing:0.14em; color:var(--negro); background:var(--cyan);
+      border:none; padding:1rem 2.5rem; cursor:pointer; border-radius: 4px;
+      text-decoration:none; text-transform:uppercase; transition:all 0.3s ease;
+      display:inline-flex; align-items:center; gap:0.6rem;
+    }
+    .btn-primary:hover { background:var(--blanco); transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,210,255,0.25); }
+    .btn-outline {
+      font-family:var(--titulo); font-size:0.75rem; font-weight:700;
+      letter-spacing:0.14em; color:var(--cyan); background:transparent;
+      border:1px solid var(--cyan); padding:1rem 2.5rem; border-radius: 4px;
+      cursor:pointer; text-decoration:none; text-transform:uppercase; transition:all 0.3s ease;
+    }
+    .btn-outline:hover { background:var(--cyan-dim); color:var(--blanco); border-color:var(--blanco); }
+
+    /* Stats hero */
+    .hero-stats {
+      display:flex; gap:5rem; margin-top:5rem; flex-wrap:wrap; justify-content:center;
+      opacity:0; animation:fadeUp 0.7s ease 1.2s forwards;
+    }
+    .stat { text-align:center; }
+    .stat-num {
+      font-family:var(--titulo); font-size:2.2rem; font-weight:900; color:var(--cyan);
+      text-shadow:0 0 15px rgba(0,210,255,0.3);
+    }
+    .stat-label {
+      font-family:var(--mono); font-size:0.65rem; color:var(--gris);
+      letter-spacing:0.15em; text-transform:uppercase; margin-top:0.5rem;
+    }
+
+    /* ─────────── SECCIÓN GENÉRICA ─────────── */
+    .section { max-width:1150px; margin:0 auto; padding:6rem 2rem; }
+    .sec-label {
+      font-family:var(--mono); font-size:0.7rem; color:var(--cyan);
+      letter-spacing:0.3em; text-transform:uppercase; margin-bottom:1.2rem;
+    }
+    .sec-title {
+      font-family:var(--titulo); font-size:clamp(2rem, 4vw, 3.2rem);
+      font-weight:900; line-height:1.2; margin-bottom:1.5rem; color:var(--blanco);
+    }
+    .sec-title em { color:var(--cyan); font-style:normal; }
+    .sec-text {
+      font-size:1rem; color:var(--gris); line-height:1.8; max-width:680px;
+    }
+    .divider {
+      max-width:1150px; margin:0 auto;
+      height:1px; background:linear-gradient(90deg, transparent, var(--cyan-border), transparent);
+    }
+
+    /* ─────────── PRODUCTOS ─────────── */
+    #productos .section { padding-top:5rem; }
+    .productos-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:2.5rem;
+      margin-top:4rem;
+    }
+
+    /* Tarjeta de producto */
+    .prod-card {
+      background:var(--panel); border:1px solid var(--cyan-border);
+      position:relative; overflow:hidden; border-radius: 8px;
+      display:flex; flex-direction:column;
+      transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .prod-card:hover { 
+      border-color:var(--cyan); 
+      transform:translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .prod-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    }
+    .prod-card.cyan-card::before  { background:linear-gradient(90deg, var(--cyan), var(--verde)); }
+    .prod-card.orange-card::before { background:linear-gradient(90deg, var(--naranja), var(--cyan)); }
+    .prod-card.orange-card { border-color:rgba(255,123,84,0.25); }
+    .prod-card.orange-card:hover { border-color:var(--naranja); }
+
+    .prod-header { padding:3rem 3rem 1rem; }
+    .prod-badge {
+      font-family:var(--mono); font-size:0.6rem; letter-spacing:0.25em;
+      text-transform:uppercase; padding:0.4rem 0.8rem; border-radius: 3px;
+      border:1px solid; display:inline-block; margin-bottom:1.5rem;
+    }
+    .prod-badge.cyan  { color:var(--cyan); border-color:var(--cyan);  background:var(--cyan-dim); }
+    .prod-badge.orange{ color:var(--naranja); border-color:var(--naranja); background:var(--naranja-dim); }
+
+    .prod-icon {
+      font-size:3.5rem; margin-bottom:1.2rem; display:block;
+      filter:drop-shadow(0 0 12px rgba(0,210,255,0.3));
+    }
+    .prod-name {
+      font-family:var(--titulo); font-size:2.2rem; font-weight:900;
+      color:var(--blanco); letter-spacing:0.04em; margin-bottom:0.5rem;
+    }
+    .prod-name.orange { color:var(--naranja); text-shadow:0 0 20px rgba(255,123,84,0.3); }
+    .prod-subtitle {
+      font-family:var(--mono); font-size:0.75rem; color:var(--gris);
+      letter-spacing:0.12em; margin-bottom:1.5rem;
+    }
+    .prod-desc {
+      font-size:0.95rem; color:var(--gris); line-height:1.8; margin-bottom:2rem;
+    }
+
+    .prod-body { padding:0 3rem; flex:1; }
+
+    /* Specs list */
+    .specs-title {
+      font-family:var(--mono); font-size:0.65rem; color:var(--gris);
+      letter-spacing:0.2em; text-transform:uppercase; margin-bottom:1.2rem;
+      padding-top:1.5rem; border-top:1px solid var(--cyan-border);
+    }
+    .specs-list { list-style:none; display:flex; flex-direction:column; gap:0.8rem; margin-bottom:2.5rem; }
+    .specs-list li {
+      display:flex; align-items:flex-start; gap:1rem;
+      font-size:0.9rem; color:var(--gris); line-height:1.6;
+    }
+    .spec-icon { font-size:1rem; flex-shrink:0; margin-top:0.1rem; }
+    .spec-key { color:var(--blanco); font-weight:500; }
+
+    /* Estados BAC */
+    .bac-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:0.8rem; margin-bottom:2.5rem;
+    }
+    .bac-item {
+      padding:1rem 0.5rem; text-align:center; border:1px solid; border-radius: 6px;
+    }
+    .bac-item.verde  { border-color:var(--verde); background:rgba(0,230,138,0.05); }
+    .bac-item.amarillo{ border-color:#e6c200; background:rgba(230,194,0,0.05); }
+    .bac-item.rojo   { border-color:#e63946; background:rgba(230,57,70,0.05); }
+    .bac-val {
+      font-family:var(--titulo); font-size:0.75rem; font-weight:700; display:block; margin-bottom:0.4rem;
+    }
+    .bac-item.verde  .bac-val  { color:var(--verde); }
+    .bac-item.amarillo .bac-val{ color:#e6c200; }
+    .bac-item.rojo   .bac-val  { color:#e63946; }
+    .bac-label { font-family:var(--mono); font-size:0.6rem; color:var(--gris); letter-spacing:0.1em; }
+
+    .prod-footer {
+      padding:2.5rem 3rem;
+      border-top:1px solid var(--cyan-border); margin-top:auto;
+    }
+    .prod-price {
+      font-family:var(--titulo); font-size:2.5rem; font-weight:900;
+      margin-bottom:0.4rem;
+    }
+    .prod-price.cyan   { color:var(--cyan); }
+    .prod-price.orange { color:var(--naranja); }
+    .prod-price-sub {
+      font-family:var(--mono); font-size:0.65rem; color:var(--gris);
+      letter-spacing:0.12em; margin-bottom:1.8rem;
+    }
+    .btn-prod {
+      width:100%; font-family:var(--titulo); font-size:0.75rem; font-weight:700;
+      letter-spacing:0.14em; text-transform:uppercase; border:none; border-radius: 4px;
+      padding:1.2rem; cursor:pointer; transition:all 0.3s ease;
+      display:inline-flex; align-items:center; justify-content:center; gap:0.6rem;
+    }
+    .btn-prod.cyan   { background:var(--cyan); color:var(--negro); }
+    .btn-prod.cyan:hover { background:var(--blanco); box-shadow:0 6px 20px rgba(0,210,255,0.25); }
+    .btn-prod.orange { background:var(--naranja); color:var(--negro); }
+    .btn-prod.orange:hover { background:var(--blanco); box-shadow:0 6px 20px rgba(255,123,84,0.25); }
+
+    /* ─────────── CARACTERÍSTICAS ─────────── */
+    .features-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; margin-top:4rem;
+    }
+    .feat-card {
+      background:var(--panel); border:1px solid var(--cyan-border);
+      padding:2.5rem 2rem; position:relative; overflow:hidden; border-radius: 8px;
+      transition:border-color 0.3s ease, transform 0.3s ease;
+    }
+    .feat-card:hover { border-color:var(--cyan); transform:translateY(-4px); }
+    .feat-card::before {
+      content:''; position:absolute; top:0; left:0; width:100%; height:2px;
+      background:linear-gradient(90deg, var(--cyan), transparent);
+    }
+    .feat-icon { font-size:2.2rem; margin-bottom:1.2rem; display:block; }
+    .feat-title {
+      font-family:var(--titulo); font-size:0.9rem; font-weight:700;
+      color:var(--blanco); letter-spacing:0.08em; margin-bottom:0.8rem;
+    }
+    .feat-text { font-size:0.9rem; color:var(--gris); line-height:1.7; }
+
+    /* ─────────── COMPARATIVA ─────────── */
+    .compare-table {
+      width:100%; border-collapse:collapse; margin-top:4rem;
+      font-size:0.9rem; background: var(--panel); border-radius: 8px; overflow: hidden;
+      border: 1px solid var(--cyan-border);
+    }
+    .compare-table th {
+      font-family:var(--mono); font-size:0.75rem; letter-spacing:0.2em;
+      text-transform:uppercase; color:var(--negro);
+      padding:1.2rem 1.5rem; text-align:left;
+    }
+    .compare-table th:first-child { background:rgba(255,255,255,0.02); color:var(--blanco); border-bottom: 1px solid var(--cyan-border); }
+    .compare-table th.cyan-th { background:var(--cyan); }
+    .compare-table th.orange-th { background:var(--naranja); }
+    .compare-table td {
+      padding:1.2rem 1.5rem; border-bottom:1px solid var(--cyan-border); color:var(--gris);
+    }
+    .compare-table td:first-child { color:var(--blanco); font-weight:500; font-size:0.85rem; background:rgba(0,0,0,0.2); }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:hover td:not(:first-child) { background:rgba(0,210,255,0.04); }
+    .check { color:var(--verde); font-size:1.1rem; }
+    .cross { color:#e63946; font-size:1.1rem; }
+
+    /* ─────────── CTA FINAL ─────────── */
+    .cta-section {
+      text-align:center; padding:8rem 2rem;
+      border-top:1px solid var(--cyan-border);
+    }
+    .cta-glow {
+      position:absolute; inset:0;
+      background:radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0,210,255,0.05), transparent 70%);
+      pointer-events:none;
+    }
+    .cta-title {
+      font-family:var(--titulo); font-size:clamp(2.5rem, 5vw, 4.5rem);
+      font-weight:900; color:var(--blanco); margin-bottom:1.5rem; line-height:1.1;
+    }
+    .cta-title span { color:var(--cyan); }
+    .cta-sub { font-size:1.05rem; color:var(--gris); max-width:550px; margin:0 auto 3rem; line-height:1.8; }
+    .cta-btns { display:flex; gap:1.2rem; justify-content:center; flex-wrap:wrap; }
+
+    /* ─────────── FOOTER ─────────── */
+    footer {
+      text-align:center; padding:4rem 2rem;
+      border-top:1px solid var(--cyan-border);
+      background:rgba(10, 18, 34, 0.4);
+    }
+    .footer-logo {
+      font-family:var(--titulo); font-size:1.5rem; font-weight:900;
+      color:var(--cyan); letter-spacing:0.25em; margin-bottom:0.8rem;
+      text-shadow:0 0 15px rgba(0,210,255,0.3);
+    }
+    .footer-logo span { color:var(--verde); }
+    .footer-tagline { font-family:var(--mono); font-size:0.7rem; color:var(--gris); letter-spacing:0.2em; margin-bottom:2rem; }
+    .footer-links { display:flex; gap:2.5rem; justify-content:center; list-style:none; margin-bottom:2rem; }
+    .footer-links a { font-family:var(--mono); font-size:0.7rem; color:var(--gris); text-decoration:none; letter-spacing:0.1em; text-transform:uppercase; transition:color 0.3s; }
+    .footer-links a:hover { color:var(--cyan); }
+    .footer-copy { font-family:var(--mono); font-size:0.65rem; color:rgba(141, 169, 196, 0.5); letter-spacing:0.1em; }
+
+    /* ─────────── ANIMACIONES ─────────── */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(20px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; } 50% { opacity:0.6; }
+    }
+    .pulse { animation:pulse 2s ease-in-out infinite; }
+
+    /* ─────────── RESPONSIVE ─────────── */
+    @media(max-width:850px){
+      nav { padding:1.2rem 2rem; }
+      .nav-links, .nav-cta { display:none; }
+      .productos-grid { grid-template-columns:1fr; }
+      .features-grid { grid-template-columns:1fr; }
+      .bac-grid { grid-template-columns:1fr; }
+      .hero-stats { gap: 2.5rem; }
+      .compare-table { display: block; overflow-x: auto; white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-icon">💚</div>
+    <span class="nav-logo">SAIF<span>VIDE</span></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#productos">Productos</a></li>
+    <li><a href="#caracteristicas">Características</a></li>
+    <li><a href="#comparativa">Comparativa</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="#productos" class="nav-cta">Ver Productos</a>
+</nav>
+
+<!-- ── HERO ── -->
+<header>
+  <p class="hero-eyebrow">⬡ Tecnología para tu Seguridad y Bienestar</p>
+  <h1 class="hero-title">SAIF<br><span class="vl">VIDE</span></h1>
+  <p class="hero-tagline">Protege lo que más importa — tu vida</p>
+  <p class="hero-desc">
+    Dispositivos inteligentes basados en Arduino que monitorean tu entorno
+    y detectan riesgos en tiempo real. Dos productos, una misión: mantenerte seguro.
+  </p>
+  <div class="hero-btns">
+    <a href="#productos" class="btn-primary">⬡ Ver Productos</a>
+    <a href="#caracteristicas" class="btn-outline">Conocer más</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">2</div>
+      <div class="stat-label">Productos</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">4+</div>
+      <div class="stat-label">Sensores</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">Monitoreo</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Arduino</div>
+    </div>
+  </div>
+</header>
+
+<div class="divider"></div>
+
+<!-- ── PRODUCTOS ── -->
+<section id="productos">
+  <div class="section">
+    <p class="sec-label">01 — Nuestros Productos</p>
+    <h2 class="sec-title">Dos soluciones,<br>un solo objetivo: <em>tu seguridad</em></h2>
+    <p class="sec-text">
+      Cada dispositivo SAIF VIDE combina electrónica de precisión con software inteligente
+      para darte información crítica en el momento exacto que la necesitas.
+    </p>
+
+    <div class="productos-grid">
+
+      <!-- ── PRODUCTO 1: DIGITAL NOSE ── -->
+      <div class="prod-card cyan-card">
+        <div class="prod-header">
+          <span class="prod-badge cyan">Monitor Atmosférico</span>
+          <span class="prod-icon">🌫️</span>
+          <h3 class="prod-name">DIGITAL<br>NOSE</h3>
+          <p class="prod-subtitle">Sistema Inteligente de Monitoreo Ambiental · Arduino UNO R4 WiFi</p>
+          <p class="prod-desc">
+            Nariz electrónica de última generación que monitorea la calidad del aire y variables atmosféricas en tu entorno.
+            Equipado con sensores MQ-2, MQ-135 y DHT11, realiza análisis de lecturas y emite alarmas en tiempo real vía Electron. 
+            El aire que respiras, siempre vigilado.
+          </p>
+        </div>
+
+        <div class="prod-body">
+          <p class="specs-title">◈ ESPECIFICACIONES TÉCNICAS</p>
+          <ul class="specs-list">
+            <li><span class="spec-icon">🔌</span><span><span class="spec-key">Microcontrolador:</span> Arduino UNO R4 WiFi</span></li>
+            <li><span class="spec-icon">🎯</span><span><span class="spec-key">Sensores:</span> MQ-2 (Humo/Gases combustibles) + MQ-135 (Calidad de Aire/CO₂) + DHT11 (Temp/Humedad)</span></li>
+            <li><span class="spec-icon">📡</span><span><span class="spec-key">Conectividad:</span> WiFi integrado — transmisión en tiempo real</span></li>
+            <li><span class="spec-icon">🖥️</span><span><span class="spec-key">Software:</span> App Electron (Windows 32/64-bit) / Android</span></li>
+            <li><span class="spec-icon">🔔</span><span><span class="spec-key">Alarma:</span> Visual + sonora con sistema de notificaciones</span></li>
+            <li><span class="spec-icon">📊</span><span><span class="spec-key">Lecturas:</span> Análisis cruzado de datos para prevención de accidentes y monitoreo ambiental.</span></li>
+          </ul>
+
+          <p class="specs-title">◈ VARIABLES DETECTADAS</p>
+          <div style="display:flex;flex-wrap:wrap;gap:0.6rem;margin-bottom:2rem;">
+            <span style="background:var(--cyan-dim);border:1px solid var(--cyan-border);color:var(--cyan);font-family:var(--mono);font-size:0.65rem;padding:0.4rem 0.8rem;letter-spacing:0.1em;border-radius:3px;">Humo y GLP (MQ-2)</span>
+            <span style="background:var(--cyan-dim);border:1px solid var(--cyan-border);color:var(--cyan);font-family:var(--mono);font-size:0.65rem;padding:0.4rem 0.8rem;letter-spacing:0.1em;border-radius:3px;">Calidad del Aire / CO₂ (MQ-135)</span>
+            <span style="background:var(--cyan-dim);border:1px solid var(--cyan-border);color:var(--cyan);font-family:var(--mono);font-size:0.65rem;padding:0.4rem 0.8rem;letter-spacing:0.1em;border-radius:3px;">Temperatura (DHT11)</span>
+            <span style="background:var(--cyan-dim);border:1px solid var(--cyan-border);color:var(--cyan);font-family:var(--mono);font-size:0.65rem;padding:0.4rem 0.8rem;letter-spacing:0.1em;border-radius:3px;">Humedad Relativa (DHT11)</span>
+          </div>
+        </div>
+
+        <div class="prod-footer">
+          <div class="prod-price cyan">$1,000 MXN</div>
+          <p class="prod-price-sub">PRECIO DE VENTA · IVA INCLUIDO</p>
+          <button class="btn-prod cyan" onclick="alert('¡Gracias por tu interés en DIGITAL NOSE! Pronto nos pondremos en contacto.')">
+            🛒 ADQUIRIR DIGITAL NOSE
+          </button>
+        </div>
+      </div>
+
+      <!-- ── PRODUCTO 2: ALCOHOLÍMETRO ── -->
+      <div class="prod-card orange-card">
+        <div class="prod-header">
+          <span class="prod-badge orange">Detector de Alcohol</span>
+          <span class="prod-icon" style="filter:drop-shadow(0 0 12px rgba(255,123,84,0.4));">🍺</span>
+          <h3 class="prod-name orange">ALCOHOLÍ-<br>METRO</h3>
+          <p class="prod-subtitle">Medidor de BAC Portátil · Arduino UNO</p>
+          <p class="prod-desc">
+            Dispositivo portátil de detección de alcohol en aliento. Mide el nivel de
+            concentración en sangre (BAC%) con precisión de 3 decimales, auto-calibración
+            inteligente y semáforo de seguridad. Ideal para control de acceso y prevención.
+          </p>
+        </div>
+
+        <div class="prod-body">
+          <p class="specs-title" style="border-color:rgba(255,123,84,0.2);">◈ ESPECIFICACIONES TÉCNICAS</p>
+          <ul class="specs-list">
+            <li><span class="spec-icon">🔌</span><span><span class="spec-key">Microcontrolador:</span> Arduino UNO</span></li>
+            <li><span class="spec-icon">🎯</span><span><span class="spec-key">Sensor:</span> MQ-3 — Detección específica de etanol en aliento</span></li>
+            <li><span class="spec-icon">📺</span><span><span class="spec-key">Display:</span> LCD I2C 16×2 — muestra BAC% en tiempo real</span></li>
+            <li><span class="spec-icon">💡</span><span><span class="spec-key">Indicadores:</span> LED Verde / Amarillo / Rojo + LED de soplado</span></li>
+            <li><span class="spec-icon">🔔</span><span><span class="spec-key">Alarma:</span> Buzzer activo — alerta sonora en nivel de riesgo</span></li>
+            <li><span class="spec-icon">🔧</span><span><span class="spec-key">Calibración:</span> Auto-calibración al inicio (100 lecturas promedio)</span></li>
+            <li><span class="spec-icon">🎛️</span><span><span class="spec-key">Operación:</span> Un solo botón de inicio — proceso guiado</span></li>
+          </ul>
+
+          <p class="specs-title" style="border-color:rgba(255,123,84,0.2);">◈ NIVELES DE ALERTA</p>
+          <div class="bac-grid">
+            <div class="bac-item verde">
+              <span class="bac-val">BAC &lt; 0.03%</span>
+              <span class="bac-label">🟢 APTO<br>p/ conducir</span>
+            </div>
+            <div class="bac-item amarillo">
+              <span class="bac-val">0.03–0.08%</span>
+              <span class="bac-label">🟡 RIESGO<br>con cuidado</span>
+            </div>
+            <div class="bac-item rojo">
+              <span class="bac-val">BAC ≥ 0.08%</span>
+              <span class="bac-label">🔴 NO APTO<br>+ alarma</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="prod-footer" style="border-color:rgba(255,123,84,0.2);">
+          <div class="prod-price orange">$650 MXN</div>
+          <p class="prod-price-sub">PRECIO DE VENTA · IVA INCLUIDO</p>
+          <button class="btn-prod orange" onclick="alert('¡Gracias por tu interés en el ALCOHOLÍMETRO! Pronto nos pondremos en contacto.')">
+            🛒 ADQUIRIR ALCOHOLÍMETRO
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /productos-grid -->
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── CARACTERÍSTICAS ── -->
+<section id="caracteristicas">
+  <div class="section">
+    <p class="sec-label">02 — ¿Por qué SAIF VIDE?</p>
+    <h2 class="sec-title">Tecnología que <em>protege</em><br>a quienes amas</h2>
+    <p class="sec-text">
+      Cada dispositivo está diseñado bajo un principio único: que la tecnología de seguridad
+      sea accesible, precisa y fácil de usar para cualquier persona.
+    </p>
+
+    <div class="features-grid">
+      <div class="feat-card">
+        <span class="feat-icon">⚡</span>
+        <h4 class="feat-title">RESPUESTA EN TIEMPO REAL</h4>
+        <p class="feat-text">Detección y alerta en segundos. Nuestros sensores no esperan — cuando hay peligro, tú lo sabes primero.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">🔬</span>
+        <h4 class="feat-title">AUTO-CALIBRACIÓN</h4>
+        <p class="feat-text">Ambos dispositivos se calibran automáticamente al encender, adaptándose a las condiciones ambientales de tu espacio.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">🎯</span>
+        <h4 class="feat-title">ALTA PRECISIÓN</h4>
+        <p class="feat-text">Sensores de grado industrial con lecturas de hasta 3 decimales en BAC y análisis de múltiples gases ambientales.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">🖥️</span>
+        <h4 class="feat-title">INTERFAZ INTUITIVA</h4>
+        <p class="feat-text">Display LCD integrado y app multiplataforma para Digital Nose. Sin complicaciones en su operación.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">🔔</span>
+        <h4 class="feat-title">ALERTAS MÚLTIPLES</h4>
+        <p class="feat-text">LEDs de colores, buzzer sonoro y notificaciones de sistema. Cuando hay riesgo, no hay forma de ignorarlo.</p>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">🏗️</span>
+        <h4 class="feat-title">100% ARDUINO</h4>
+        <p class="feat-text">Basados en la plataforma más confiable del mundo. Hardware abierto, código documentado y excelente estabilidad.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── COMPARATIVA ── -->
+<section id="comparativa">
+  <div class="section">
+    <p class="sec-label">03 — Comparativa</p>
+    <h2 class="sec-title">¿Cuál es el producto<br>que <em>necesitas</em>?</h2>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Característica</th>
+          <th class="cyan-th">DIGITAL NOSE</th>
+          <th class="orange-th">ALCOHOLÍMETRO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Tipo de monitoreo</td>
+          <td style="color:var(--blanco);">Gases combustibles, Calidad de Aire y Clima</td>
+          <td style="color:var(--blanco);">Alcohol en aliento (BAC)</td>
+        </tr>
+        <tr>
+          <td>Sensores integrados</td>
+          <td style="color:var(--blanco);">MQ-2 + MQ-135 + DHT11</td>
+          <td style="color:var(--blanco);">MQ-3 (etanol específico)</td>
+        </tr>
+        <tr>
+          <td>Microcontrolador</td>
+          <td style="color:var(--blanco);">Arduino UNO R4 WiFi</td>
+          <td style="color:var(--blanco);">Arduino UNO</td>
+        </tr>
+        <tr>
+          <td>Conectividad WiFi</td>
+          <td><span class="check">✔</span></td>
+          <td><span class="cross">✘</span></td>
+        </tr>
+        <tr>
+          <td>App Integrada</td>
+          <td><span class="check">✔</span> Win / Android</td>
+          <td><span class="cross">✘</span></td>
+        </tr>
+        <tr>
+          <td>Display LCD</td>
+          <td><span class="cross">✘</span></td>
+          <td><span class="check">✔</span> 16×2 I2C</td>
+        </tr>
+        <tr>
+          <td>Semáforo LED</td>
+          <td><span class="check">✔</span> Interfaz Visual</td>
+          <td><span class="check">✔</span> Físico (V/A/R)</td>
+        </tr>
+        <tr>
+          <td>Alarma sonora</td>
+          <td><span class="check">✔</span></td>
+          <td><span class="check">✔</span> Buzzer activo</td>
+        </tr>
+        <tr>
+          <td>Auto-calibración</td>
+          <td><span class="check">✔</span></td>
+          <td><span class="check">✔</span> 100 lecturas iniciales</td>
+        </tr>
+        <tr>
+          <td>Uso ideal</td>
+          <td style="color:var(--blanco);">Hogar, oficina, laboratorio</td>
+          <td style="color:var(--blanco);">Control vehicular, acceso</td>
+        </tr>
+        <tr>
+          <td>Precio</td>
+          <td style="color:var(--cyan);font-family:var(--titulo);font-weight:700;font-size:1.1rem;">$1,000 MXN</td>
+          <td style="color:var(--naranja);font-family:var(--titulo);font-weight:700;font-size:1.1rem;">$650 MXN</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── CTA FINAL ── -->
+<section id="contacto" style="position:relative;overflow:hidden;">
+  <div class="cta-glow"></div>
+  <div class="section cta-section">
+    <p class="sec-label" style="text-align:center;">04 — Contáctanos</p>
+    <h2 class="cta-title">¿Listo para proteger<br>tu <span>entorno</span>?</h2>
+    <p class="cta-sub">
+      Adquiere cualquiera de nuestros dispositivos SAIF VIDE y da el primer paso
+      hacia un ambiente más seguro para ti y los tuyos.
+    </p>
+    <div class="cta-btns">
+      <a href="mailto:jorgemundopzk@gmail.com" class="btn-primary">📧 jorgemundopzk@gmail.com</a>
+      <a href="https://wa.me/527779807339" target="_blank" class="btn-outline">💬 777-980-7339 (WhatsApp)</a>
+    </div>
+
+    <div style="display:flex;gap:3rem;justify-content:center;margin-top:5rem;flex-wrap:wrap;">
+      <div style="text-align:center; background: var(--panel); padding: 2rem 3rem; border: 1px solid var(--cyan-border); border-radius: 8px;">
+        <p style="font-family:var(--mono);font-size:0.7rem;color:var(--gris);letter-spacing:0.2em;margin-bottom:0.6rem;">PACK COMPLETO</p>
+        <p style="font-family:var(--titulo);font-size:2.8rem;font-weight:900;color:var(--verde);text-shadow:0 0 20px rgba(0,230,138,0.3); margin-bottom: 0.5rem;">$1,650 MXN</p>
+        <p style="font-family:var(--mono);font-size:0.75rem;color:var(--gris);">Digital Nose + Alcoholímetro</p>
+        <p style="font-family:var(--mono);font-size:0.65rem;color:var(--naranja); margin-top:0.8rem; letter-spacing:0.05em;">* Costo de envío extra dependiendo la zona *</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">SAIF<span>VIDE</span></div>
+  <p class="footer-tagline">Tecnología para tu Seguridad · Arduino · Sensores · Protección</p>
+  <ul class="footer-links">
+    <li><a href="#productos">Productos</a></li>
+    <li><a href="#caracteristicas">Características</a></li>
+    <li><a href="#comparativa">Comparativa</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <p class="footer-copy">© 2026 SAIF VIDE · Todos los derechos reservados · CONALEP 241 Cuernavaca, Morelos</p>
+</footer>
+
+</body>
+</html>
